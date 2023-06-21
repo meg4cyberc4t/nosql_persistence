@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/meg4cyberc4t/nosql_persistence/assets/66907532/9ed174b9-f31d-43c4-b811-a0f5dd84e6ad"></img>
+  <img src=".github/logo.png"></img>
   <h3>Using NoSQL databases with migrations</h3>
 </div>
 </br>
