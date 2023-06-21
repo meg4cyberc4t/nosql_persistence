@@ -9,7 +9,7 @@ Using NoSQL databases is now easier. We want to simplify a lot of work with NoSQ
 
 ### Features
 
-💻 Good work with models from Json & toJSON.\
+💻 Good work with models **fromJson** & **toJson**.\
 💐 Migrations between versions.\
 🌱 Hidden logic inside the class, the connection is SOLID.\
 🏁 Speed of work and data loading from <a href="https://pub.dev/packages/hive">Hive</a> and <a href="https://pub.dev/packages/flutter_secure_storage">Flutter Secure Storage</a>.
