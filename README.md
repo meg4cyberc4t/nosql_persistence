@@ -1,5 +1,5 @@
 <div align="center">
-  <img src=".github/logo.png"></img>
+  <img src="https://raw.githubusercontent.com/meg4cyberc4t/nosql_persistence/main/.github/logo.png"></img>
   <h3>Using NoSQL databases with migrations</h3>
 </div>
 </br>
@@ -19,12 +19,12 @@ Using NoSQL databases is now easier. We want to simplify a lot of work with NoSQ
 Using NoSQL databases is difficult when you need to update data between versions. In our package, we have tried to simplify working with them so that it is easier for you to work. Now migrations can be done like this:
 ```dart
 @override
- Future<void> migrate(int oldVersion, int currentVersion) async {
-   if (oldVersion < currentVersion) {
-     await write(0);
-   }
-   return super.migrate(oldVersion, currentVersion);
- }
+Future<void> migrate(int oldVersion, int currentVersion) async {
+  if (oldVersion < currentVersion) {
+    await write(0);
+  }
+  return super.migrate(oldVersion, currentVersion);
+}
 ```
 
 
