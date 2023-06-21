@@ -1,39 +1,37 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+ <div align="center">
+    <h1>nosql_persistence</h1>
+    <p>Using nosql databases with migrations</p>
+</div>
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Using NoSQL databases is now easier. We restrict them using our interface, and set the database version record. In the end, working with the database will be something like this:
 
 ```dart
-const like = 'sample';
+final class HiveExampleDataSource extends HiveDataSource {
+  HiveExampleDataSource(super.hive)
+      : super(
+          boxName: 'example',
+          currentStorageVersion: 2,
+        );
+
+  @override
+  @protected
+  Future<void> migrate(int oldVersion, int currentVersion) async {
+    if (await read(_counterKey) == null) {
+      await saveCounter(0);
+    }
+
+    return super.migrate(oldVersion, currentVersion);
+  }
+
+  final String _counterKey = "counter";
+
+  Future<String> getCounter() async =>
+      (await read(_counterKey))!; // It's not just force unwrap, see migrate()
+
+  Future<void> saveCounter(int counter) => write(
+        key: _counterKey,
+        value: counter.toString(),
+      );
+}
 ```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
