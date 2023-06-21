@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:meta/meta.dart';
 
 abstract base class PersistenceInterface {
@@ -58,4 +60,22 @@ abstract base class PersistenceInterface {
         .onError((Object? error, StackTrace stackTrace) => null);
     await __updateStorageVersion();
   }
+
+  @protected
+  Future<T?> getJsonTyped<T extends Object>(
+    String key,
+    Function(Map<String, Object?> json) fromJson, {
+    T? defaultValue,
+  }) async {
+    final String? json = await read(key);
+    if (json == null) return defaultValue;
+    return fromJson(jsonDecode(json));
+  }
+
+  @protected
+  Future<void> putJsonTyped(
+    String key,
+    Map<String, Object?> json,
+  ) =>
+      write(key: key, value: jsonEncode(json));
 }

@@ -19,19 +19,16 @@ abstract base class StorageDataSource extends PersistenceInterface {
   @mustCallSuper
   Future<void> initAsync({
     HiveCipher? encryptionCipher,
-    int Function(dynamic, dynamic) keyComparator = defaultKeyComparator,
-    bool Function(int, int) compactionStrategy = defaultCompactionStrategy,
-    bool crashRecovery = true,
     String? path,
     String? collection,
   }) async {
     _box = await _hive.openLazyBox<String>(
       databaseName,
       collection: collection,
-      compactionStrategy: compactionStrategy,
-      crashRecovery: crashRecovery,
+      compactionStrategy: defaultCompactionStrategy,
+      crashRecovery: true,
       encryptionCipher: encryptionCipher,
-      keyComparator: keyComparator,
+      keyComparator: defaultKeyComparator,
       path: path,
     );
     await super.initAsync();

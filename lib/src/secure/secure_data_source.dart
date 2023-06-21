@@ -4,6 +4,7 @@ import 'package:nosql_persistence/src/persistence_interface.dart';
 
 abstract base class SecureDataSource extends PersistenceInterface {
   final FlutterSecureStorage _secureStorage;
+  @internal
   final bool separateKey;
 
   const SecureDataSource(
@@ -19,6 +20,7 @@ abstract base class SecureDataSource extends PersistenceInterface {
   }
 
   @override
+  @protected
   Future<void> write({
     required String key,
     required String? value,
