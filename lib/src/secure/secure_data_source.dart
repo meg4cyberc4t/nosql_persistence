@@ -16,7 +16,7 @@ abstract base class SecureDataSource extends PersistenceInterface {
 
   String __separateKey(String key) {
     if (!separateKey) return key;
-    return "_${databaseName}_$key";
+    return '_${databaseName}_$key';
   }
 
   @override

@@ -26,7 +26,6 @@ abstract base class StorageDataSource extends PersistenceInterface {
       databaseName,
       collection: collection,
       compactionStrategy: defaultCompactionStrategy,
-      crashRecovery: true,
       encryptionCipher: encryptionCipher,
       keyComparator: defaultKeyComparator,
       path: path,
@@ -50,9 +49,9 @@ abstract base class StorageDataSource extends PersistenceInterface {
 
   @override
   @protected
-  Future<bool> containsKey(key) async => _box.containsKey(key);
+  Future<bool> containsKey(String key) async => _box.containsKey(key);
 
   @override
   @protected
-  Future<void> delete(key) => _box.delete(key);
+  Future<void> delete(String key) => _box.delete(key);
 }
