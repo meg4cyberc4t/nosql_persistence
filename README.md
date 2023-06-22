@@ -21,7 +21,7 @@ Using NoSQL databases is difficult when you need to update data between versions
 @override
 Future<void> migrate(int oldVersion, int currentVersion) async {
   if (oldVersion < currentVersion) {
-    await write(0);
+    await put(key: "key", value: "value");
   }
   return super.migrate(oldVersion, currentVersion);
 }
@@ -29,7 +29,7 @@ Future<void> migrate(int oldVersion, int currentVersion) async {
 
 
 ### Getting Started
-1. Add nosql_persistence to dependencies
+1. Add <a href="https://pub.dev/packages/nosql_persistence">nosql_persistence</a> to dependencies
 2. Initialize according to the instructions <a href="https://pub.dev/packages/hive">Hive</a> and <a href="https://pub.dev/packages/flutter_secure_storage">Flutter Secure Storage</a>.
 3. Create your final class and inherit it from ```SecureDataSource``` (if it is protected data) and ```StorageDataSource``` (if there are a lot of them and you need fast work).
 You will get something like this
@@ -44,10 +44,10 @@ final class ExampleDataSource extends SecureDataSource {
 ```
 4. Describe the methods you need
 ```dart
-  Future<String?> getLastEmail() async => read('last_email');
+  Future<String?> getLastEmail() async => get('last_email');
 
   Future<void> putLastEmail(String value) async =>
-      write(key: 'last_email', value: value);
+      put(key: 'last_email', value: value);
 ```
 5. Describe the methods with the models that you need
 ```dart

@@ -19,16 +19,16 @@ abstract base class PersistenceInterface {
   final int databaseVersion;
 
   /// Write a record from the database
-  Future<void> write({required String key, required String? value});
+  Future<void> put({required String key, required String? value});
 
   /// Read a record from the database
-  Future<String?> read(String key);
+  Future<String?> get(String key);
 
   /// Returns true if there is an entry for such a key
   Future<bool> containsKey(String key);
 
   /// Delete a record from the database
-  Future<void> delete(String key) => write(key: key, value: null);
+  Future<void> delete(String key) => put(key: key, value: null);
 
   /// It will be called automatically once, during the [initAsync] call.
   /// Updates data structures between versions
@@ -42,11 +42,11 @@ abstract base class PersistenceInterface {
   @protected
   String get __boxVersionKey => '__${databaseName}_storage_version';
 
-  Future<int> get _storageVersion => read(__boxVersionKey)
+  Future<int> get _storageVersion => get(__boxVersionKey)
       .then((String? value) => int.tryParse(value ?? '') ?? 0);
 
   @protected
-  Future<void> __updateStorageVersion() => write(
+  Future<void> __updateStorageVersion() => put(
         key: __boxVersionKey,
         value: databaseVersion.toString(),
       );
@@ -67,7 +67,7 @@ abstract base class PersistenceInterface {
     Function(Map<String, Object?> json) fromJson, {
     T? defaultValue,
   }) async {
-    final String? json = await read(key);
+    final String? json = await get(key);
     if (json == null) return defaultValue;
     return fromJson(jsonDecode(json));
   }
@@ -77,5 +77,5 @@ abstract base class PersistenceInterface {
     String key,
     Map<String, Object?> json,
   ) =>
-      write(key: key, value: jsonEncode(json));
+      put(key: key, value: jsonEncode(json));
 }

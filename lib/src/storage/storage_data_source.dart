@@ -36,7 +36,7 @@ abstract base class StorageDataSource extends PersistenceInterface {
 
   @override
   @protected
-  Future<void> write({required String key, required String? value}) async {
+  Future<void> put({required String key, required String? value}) async {
     if (value == null) {
       await _box.delete(key);
     } else {
@@ -46,7 +46,7 @@ abstract base class StorageDataSource extends PersistenceInterface {
 
   @override
   @protected
-  Future<String?> read(String key) => _box.get(key);
+  Future<String?> get(String key) => _box.get(key);
 
   @override
   @protected

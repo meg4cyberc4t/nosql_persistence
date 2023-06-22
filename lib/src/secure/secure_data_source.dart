@@ -21,7 +21,7 @@ abstract base class SecureDataSource extends PersistenceInterface {
 
   @override
   @protected
-  Future<void> write({
+  Future<void> put({
     required String key,
     required String? value,
   }) =>
@@ -29,7 +29,7 @@ abstract base class SecureDataSource extends PersistenceInterface {
 
   @override
   @protected
-  Future<String?> read(String key) =>
+  Future<String?> get(String key) =>
       _secureStorage.read(key: __separateKey(key));
 
   @override

@@ -18,10 +18,10 @@ final class ExampleDataSource extends StorageDataSource {
 
   static const String _counterKey = "counter";
 
-  Future<int> getCounter() async => int.parse((await read(_counterKey)) ?? "0");
+  Future<int> getCounter() async => int.parse((await get(_counterKey)) ?? "0");
 
   Future<void> saveCounter(int value) async =>
-      write(key: _counterKey, value: value.toString());
+      put(key: _counterKey, value: value.toString());
 }
 
 Future<void> main() async {
