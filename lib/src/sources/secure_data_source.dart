@@ -4,6 +4,12 @@ import 'package:nosql_persistence/src/persistence_interface.dart';
 import 'package:nosql_persistence/src/resolvers/persistence_migrations_resolver.dart';
 import 'package:nosql_persistence/src/resolvers/persistense_json_resolver.dart';
 
+/// Implementation of the [PersistenceInterface] for Hive.
+/// Use this to store data without worrying about performance.
+
+/// Be sure to call [initAsync] after the constructor and wait for it to
+/// execute.
+/// Calling [dispose] is desirable, but not necessary.
 abstract base class SecureDataSource extends PersistenceInterface
     with PersistenseJsonResolver, PersistenceMigrationsResolver {
   final FlutterSecureStorage _secureStorage;
