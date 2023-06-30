@@ -1,7 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:meta/meta.dart';
-import 'package:nosql_persistence/src/ext/default_comparation_strategy.dart';
-import 'package:nosql_persistence/src/ext/default_key_comparator.dart';
 import 'package:nosql_persistence/src/persistence_interface.dart';
 import 'package:nosql_persistence/src/resolvers/persistence_migrations_resolver.dart';
 import 'package:nosql_persistence/src/resolvers/persistense_json_resolver.dart';
@@ -36,9 +34,7 @@ abstract base class StorageDataSource extends PersistenceInterface
     _box = await _hive.openLazyBox<String>(
       databaseName,
       collection: collection,
-      compactionStrategy: defaultCompactionStrategy,
       encryptionCipher: encryptionCipher,
-      keyComparator: defaultKeyComparator,
       path: path,
     );
     await initMigrations();
