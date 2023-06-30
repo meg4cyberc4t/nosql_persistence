@@ -1,18 +1,29 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:meta/meta.dart';
+import 'package:nosql_persistence/src/ext/default_comparation_strategy.dart';
+import 'package:nosql_persistence/src/ext/default_key_comparator.dart';
 import 'package:nosql_persistence/src/persistence_interface.dart';
-import 'package:nosql_persistence/src/storage/default_comparation_strategy.dart';
-import 'package:nosql_persistence/src/storage/default_key_comparator.dart';
+import 'package:nosql_persistence/src/resolvers/persistence_migrations_resolver.dart';
+import 'package:nosql_persistence/src/resolvers/persistense_json_resolver.dart';
 
-abstract base class StorageDataSource extends PersistenceInterface {
+abstract base class StorageDataSource extends PersistenceInterface
+    with PersistenseJsonResolver, PersistenceMigrationsResolver {
   final HiveInterface _hive;
 
   late final LazyBox<String> _box;
 
+  @override
+  @protected
+  final String databaseName;
+
+  @override
+  @protected
+  final int databaseVersion;
+
   StorageDataSource(
     this._hive, {
-    required super.databaseName,
-    super.databaseVersion = 1,
+    required this.databaseName,
+    this.databaseVersion = 1,
   });
 
   @override
@@ -30,18 +41,14 @@ abstract base class StorageDataSource extends PersistenceInterface {
       keyComparator: defaultKeyComparator,
       path: path,
     );
+    await initMigrations();
     await super.initAsync();
   }
 
   @override
   @protected
-  Future<void> put({required String key, required String? value}) async {
-    if (value == null) {
-      await _box.delete(key);
-    } else {
-      await _box.put(key, value);
-    }
-  }
+  Future<void> put({required String key, required String? value}) async =>
+      value == null ? _box.delete(key) : _box.put(key, value);
 
   @override
   @protected

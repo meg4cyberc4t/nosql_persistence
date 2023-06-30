@@ -1,16 +1,34 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:nosql_persistence/src/persistence_interface.dart';
+import 'package:nosql_persistence/src/resolvers/persistence_migrations_resolver.dart';
+import 'package:nosql_persistence/src/resolvers/persistense_json_resolver.dart';
 
-abstract base class SecureDataSource extends PersistenceInterface {
+abstract base class SecureDataSource extends PersistenceInterface
+    with PersistenseJsonResolver, PersistenceMigrationsResolver {
   final FlutterSecureStorage _secureStorage;
+
+  @override
+  Future<void> initAsync() async {
+    await initMigrations();
+    super.initAsync();
+  }
+
   @internal
   final bool separateKey;
 
+  @override
+  @protected
+  final String databaseName;
+
+  @override
+  @protected
+  final int databaseVersion;
+
   const SecureDataSource(
     this._secureStorage, {
-    required super.databaseName,
-    super.databaseVersion = 1,
+    required this.databaseName,
+    this.databaseVersion = 1,
     this.separateKey = true,
   });
 
