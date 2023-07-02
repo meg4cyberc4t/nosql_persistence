@@ -112,6 +112,51 @@ final class ExampleDataSource extends SecureDataSource {
 }
 ```
 Very simple and clean! 🌱
+
+### Opportunities
+The implementation of features in datasources occurs with the help of mixins. Here are their descriptions and methods so that you can use them more easily:
+
+#### PersistenseJsonResolver
+Allows you to conveniently store and work with objects through serialization.
+```dart
+final taskModel = await getJsonTyped<TaskModel>("your key", TaskModel.fromJson);
+
+await putJsonTyped("your key", taskModel.toJson());
+```
+
+#### PersistenceMigrationsResolver
+Allows you to work with migrations between versions.
+```dart
+ExampleDataSource(super.secureStorage)
+      : super(
+          databaseName: 'example',
+          databaseVersion: 1,
+        );
+
+@override
+Future<void> migrate(int oldVersion, int currentVersion) async {
+  if (oldVersion < 2) {
+    await delete('current');
+  }
+  return super.migrate(oldVersion, currentVersion);
+}
+```
+
+#### PersistenceExpiredSystemResolver
+Allows you to save a value with the condition that when it is received after such a period, the value will be marked as obsolete and deleted from the database. Convenient for temporary caching.
+```dart
+@override
+Duration? get databaseExpiredDuration => const Duration(seconds: 5);
+
+Future<int> getCounter() async =>
+    int.parse((await getExpired(_counterKey)) ?? '0');
+
+Future<void> saveCounter(int value) => putExpired(
+      key: _counterKey,
+      value: value.toString(),
+    );
+```
+
    
 ### Contributing 
 Contributions are welcomed!
