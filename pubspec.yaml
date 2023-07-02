@@ -1,5 +1,5 @@
 name: nosql_persistence
-description: Using nosql databases with migrations
+description: Using nosql databases with migrations, "expired" data, helpful functions
 version: 0.1.1
 homepage: https://pub.dev/packages/nosql_persistence
 repository: https://github.com/meg4cyberc4t/nosql_persistence
