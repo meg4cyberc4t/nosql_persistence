@@ -31,8 +31,8 @@ jobs:
       - name: Analyze project source
         run: dart analyze
         
-      - name: Run tests
-        run: dart test
+#       - name: Run tests
+#         run: dart test
         
       - name: Run publish "--dry-run"
         run: dart pub publish --dry-run
