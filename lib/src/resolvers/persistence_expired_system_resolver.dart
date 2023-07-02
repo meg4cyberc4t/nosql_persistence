@@ -6,11 +6,15 @@ import 'package:nosql_persistence/src/dto/expired_value_model.dart';
 
 const String kExpiredSettingsKey = '__expired_settings';
 const Duration kExpiredDefaultDuration = Duration(days: 7);
+const bool kNeedRefreshDefault = false;
 
 base mixin PersistenceExpiredSystemResolver on PersistenceInterface {
   Duration? get databaseExpiredDuration => null;
 
-  Future<String?> getExpired(String key) async {
+  Future<String?> getExpired(
+    String key, {
+    bool needRefresh = kNeedRefreshDefault,
+  }) async {
     final String? json = await get(key);
     if (json == null) {
       await delete(key);
@@ -25,7 +29,13 @@ base mixin PersistenceExpiredSystemResolver on PersistenceInterface {
       await delete(key);
       return null;
     }
-
+    if (needRefresh) {
+      await putExpired(
+        key: key,
+        value: expValue.value,
+        expirationDuration: expValue.expirationDuration,
+      );
+    }
     return expValue.value;
   }
 
@@ -53,9 +63,10 @@ base mixin PersistenceExpiredSystemResolver on PersistenceInterface {
 
   Future<T?> getExpiredTyped<T extends Object>(
     String key,
-    T Function(Map<String, Object?> json) fromJson,
-  ) async {
-    final String? value = await getExpired(key);
+    T Function(Map<String, Object?> json) fromJson, {
+    bool needRefresh = kNeedRefreshDefault,
+  }) async {
+    final String? value = await getExpired(key, needRefresh: needRefresh);
     if (value == null) return null;
     return fromJson(jsonDecode(value));
   }
