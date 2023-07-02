@@ -9,6 +9,9 @@ final class ExampleDataSource extends StorageDataSource {
         );
 
   @override
+  Duration? get databaseExpiredDuration => const Duration(seconds: 5);
+
+  @override
   Future<void> migrate(int oldVersion, int currentVersion) async {
     if (oldVersion < currentVersion) {
       await saveCounter(0);
@@ -18,10 +21,13 @@ final class ExampleDataSource extends StorageDataSource {
 
   static const String _counterKey = 'counter';
 
-  Future<int> getCounter() async => int.parse((await get(_counterKey)) ?? '0');
+  Future<int> getCounter() async =>
+      int.parse((await getExpired(_counterKey)) ?? '0');
 
-  Future<void> saveCounter(int value) async =>
-      put(key: _counterKey, value: value.toString());
+  Future<void> saveCounter(int value) => putExpired(
+        key: _counterKey,
+        value: value.toString(),
+      );
 }
 
 Future<void> main() async {
@@ -76,8 +82,15 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   Future<void> _incrementCounter() async {
+    setState(() => _counter++);
+  }
+
+  Future<void> saveValue() async {
     await widget.dataSource.saveCounter(_counter);
-    _counter = await widget.dataSource.getCounter() + 1;
+  }
+
+  Future<void> loadValue() async {
+    _counter = await widget.dataSource.getCounter();
     setState(() {});
   }
 
@@ -101,10 +114,27 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
+        floatingActionButton: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            FloatingActionButton(
+              onPressed: saveValue,
+              tooltip: 'Save',
+              child: const Icon(Icons.save),
+            ),
+            const SizedBox(height: 8),
+            FloatingActionButton(
+              onPressed: loadValue,
+              tooltip: 'Upload',
+              child: const Icon(Icons.upload),
+            ),
+            const SizedBox(height: 8),
+            FloatingActionButton(
+              onPressed: _incrementCounter,
+              tooltip: 'Increment',
+              child: const Icon(Icons.add),
+            ),
+          ],
         ),
       );
 }

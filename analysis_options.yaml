@@ -1,5 +1,9 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude: 
+    - lib/**.g.dart
+
 linter:
   rules:
     avoid_returning_null_for_void: false

@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:nosql_persistence/src/persistence_interface.dart';
+import 'package:nosql_persistence/src/resolvers/persistence_expired_system_resolver.dart';
 import 'package:nosql_persistence/src/resolvers/persistence_migrations_resolver.dart';
 import 'package:nosql_persistence/src/resolvers/persistense_json_resolver.dart';
 
@@ -11,12 +12,16 @@ import 'package:nosql_persistence/src/resolvers/persistense_json_resolver.dart';
 /// execute.
 /// Calling [dispose] is desirable, but not necessary.
 abstract base class SecureDataSource extends PersistenceInterface
-    with PersistenseJsonResolver, PersistenceMigrationsResolver {
+    with
+        PersistenseJsonResolver,
+        PersistenceMigrationsResolver,
+        PersistenceExpiredSystemResolver {
   final FlutterSecureStorage _secureStorage;
 
   @override
   Future<void> initAsync() async {
     await initMigrations();
+    await initExpiredSystem();
     super.initAsync();
   }
 
@@ -31,7 +36,7 @@ abstract base class SecureDataSource extends PersistenceInterface
   @protected
   final int databaseVersion;
 
-  const SecureDataSource(
+  SecureDataSource(
     this._secureStorage, {
     required this.databaseName,
     this.databaseVersion = 1,

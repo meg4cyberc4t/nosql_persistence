@@ -1,6 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:nosql_persistence/src/persistence_interface.dart';
+import 'package:nosql_persistence/src/resolvers/persistence_expired_system_resolver.dart';
 import 'package:nosql_persistence/src/resolvers/persistence_migrations_resolver.dart';
 import 'package:nosql_persistence/src/resolvers/persistense_json_resolver.dart';
 
@@ -11,7 +12,10 @@ import 'package:nosql_persistence/src/resolvers/persistense_json_resolver.dart';
 /// it to execute.
 /// Calling [dispose] is desirable, but not necessary.
 abstract base class StorageDataSource extends PersistenceInterface
-    with PersistenseJsonResolver, PersistenceMigrationsResolver {
+    with
+        PersistenseJsonResolver,
+        PersistenceMigrationsResolver,
+        PersistenceExpiredSystemResolver {
   final HiveInterface _hive;
 
   late final LazyBox<String> _box;
@@ -44,6 +48,7 @@ abstract base class StorageDataSource extends PersistenceInterface
       path: path,
     );
     await initMigrations();
+    await initExpiredSystem();
     await super.initAsync();
   }
 

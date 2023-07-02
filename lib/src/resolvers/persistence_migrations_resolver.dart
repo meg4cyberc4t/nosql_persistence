@@ -36,7 +36,7 @@ base mixin PersistenceMigrationsResolver on PersistenceInterface {
   /// You need to call this function and wait after the constructor.
   /// It causes migrations.
   /// If you need an action in the database when opening, write it in [migrate]
-  @protected
+  @internal
   Future<void> initMigrations() async {
     await migrate(await _storageVersion, databaseVersion)
         .onError((Object? error, StackTrace stackTrace) => null);

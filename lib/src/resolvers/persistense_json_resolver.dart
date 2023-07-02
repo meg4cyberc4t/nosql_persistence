@@ -14,7 +14,7 @@ base mixin PersistenseJsonResolver on PersistenceInterface {
   @protected
   Future<T?> getJsonTyped<T extends Object>(
     String key,
-    Function(Map<String, Object?> json) fromJson, {
+    T Function(Map<String, Object?> json) fromJson, {
     T? defaultValue,
   }) async {
     final String? json = await get(key);
