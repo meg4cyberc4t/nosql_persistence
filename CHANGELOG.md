@@ -1,5 +1,6 @@
 ## 0.3.0
 * Add getBool, putBool, getInt, putBool methods for new PersistenceBaseTypesResolver. It can be used in any datasources.
+* Add getJsonListTyped and putJsonListTyped on PersistenseJsonResolver.
 
 ## 0.2.0
 
