@@ -34,4 +34,24 @@ base mixin PersistenseJsonResolver on PersistenceInterface {
     Map<String, Object?> json,
   ) =>
       put(key: key, value: jsonEncode(json));
+
+  @protected
+  Future<List<T>?> getJsonListTyped<T extends Object>(
+    String key,
+    T Function(Map<String, Object?> json) fromJson,
+  ) async {
+    final String? json = await get(key);
+    if (json == null) return <T>[];
+    return (jsonDecode(json) as List<dynamic>)
+        .cast<Map<String, Object?>>()
+        .map(fromJson)
+        .toList();
+  }
+
+  @protected
+  Future<void> putJsonListTyped(
+    String key,
+    List<Map<String, Object?>> json,
+  ) =>
+      put(key: key, value: jsonEncode(json));
 }
