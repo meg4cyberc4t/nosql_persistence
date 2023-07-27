@@ -42,7 +42,8 @@ base mixin PersistenseJsonResolver on PersistenceInterface {
   ) async {
     final String? json = await get(key);
     if (json == null) return <T>[];
-    return (jsonDecode(json) as List<Map<String, Object?>>)
+    return (jsonDecode(json) as List<dynamic>)
+        .cast<Map<String, Object?>>()
         .map(fromJson)
         .toList();
   }
