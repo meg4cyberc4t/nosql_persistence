@@ -1,3 +1,6 @@
+## 0.3.1 
+* Upgrade flutter_secure_storage version to ">=8.0.0 <10.0.0"
+
 ## 0.3.0
 * Add getBool, putBool, getInt, putBool methods for new PersistenceBaseTypesResolver. It can be used in any datasources.
 * Add getJsonListTyped and putJsonListTyped on PersistenseJsonResolver.
